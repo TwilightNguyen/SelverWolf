@@ -1,0 +1,21 @@
+{
+  "name": "bun-api",
+  "module": "index.js",
+  "type": "module",
+  "devDependencies": {
+    "@happy-dom/global-registrator": "^13.6.2",
+    "@types/bun": "latest",
+    "@types/figlet": "^1.5.8"
+  },
+  "scripts": {
+    "dev": "bun run src/index.js"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "figlet": "^1.7.0",
+    "ksuid": "^3.0.0",
+    "mysql2": "^3.9.2"
+  }
+}

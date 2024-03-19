@@ -1,8 +1,15 @@
-# React + Vite
+# bun-api
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To install dependencies:
 
-Currently, two official plugins are available:
+```bash
+bun install
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run:
+
+```bash
+bun run index.ts
+```
+
+This project was created using `bun init` in bun v1.0.29. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

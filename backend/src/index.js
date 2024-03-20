@@ -28,37 +28,43 @@ connection.connect((err) => {
     });
 });
 
-const sendToEveryone = (message) => {
+const sendToEveryone = (data) => {
     openSocket.forEach(ws => {
-        ws.send(message);
+        ws.send(JSON.stringify(data));
     });
 }
 
 const server = Bun.serve({
     port: 3200,
     async fetch(req, server) {
-        //upgrade the request to websocket
         const uid = await KSUID.random();
-        if(server.upgrade(req, {data: {id: uid.string}})){
+
+        //get username
+        const url = new URL(req.url);
+        const username = url.searchParams.get('username');
+
+        //upgrade the request to websocket
+        if(server.upgrade(req, {data: {id: uid.string, username: username}})){
             return;
-        }
-        //return new Response("Success!");
-        const body = figlet.textSync('Bun!'); 
-        return new Response(body);
+        } 
+        return new Response('Update failed', {status: 500});
     },
+    
     websocket: {
         open(ws) {
             openSocket.push(ws);
-            const msg = `a user has entered the chat.`;
-            sendToEveryone(msg);
+            const msg = `${ws.data.username} has entered the chat.`;
+            sendToEveryone({message:msg, isAutomated: true});
+            // retrieve previous unread messages from db
         },
         message(ws, message) {
             console.log(message);
-            sendToEveryone(message);
+            sendToEveryone({message: `${ws.data.username}: ${message}`, isAutomated: false});
+            // persist data in db
         },
         close(ws, code, message) {
-            const msg = `a user has left the chat.`;
-            sendToEveryone(msg);
+            const msg = `${ws.data.username} has left the chat.`;
+            sendToEveryone({message:msg, isAutomated: true});
             const uid = ws.data?.id;
             console.log(uid, 'closed');
             openSocket = openSocket.filter(ws => ws.data.id !== uid);

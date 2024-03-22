@@ -1,8 +1,8 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 
-
-export default function Index() {
-  const [username,setUsername] = useState('');
+function Home() {
+    const [username,setUsername] = useState('');
   const [usernameField,setUsernameField] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -91,3 +91,5 @@ export default function Index() {
     </>
   )
 }
+
+export default Home;

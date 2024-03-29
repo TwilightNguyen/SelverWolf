@@ -1,0 +1,19 @@
+
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    width: 410px;
+    height: 100vh;
+    border-right: 1px solid #ccc;
+
+    .menu{
+        background-color: rgba(0,154,255,1);
+        color: rgba(255,255,255,1);
+        width: 64px;
+        height: 100vh;
+    }
+
+    .menu-content{
+        background-color: rgb(255, 255, 255);
+    }
+}

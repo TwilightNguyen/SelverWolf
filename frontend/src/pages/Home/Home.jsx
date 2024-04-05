@@ -1,8 +1,15 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 
+import classNames from 'classnames/bind';
+import { SentIcon } from '../../components/icons';
+
+import styles from './Home.module.scss';
+
+const cx = classNames.bind(styles);
+
 function Home() {
-    const [username,setUsername] = useState('');
+  const [username,setUsername] = useState('');
   const [usernameField,setUsernameField] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -70,8 +77,8 @@ function Home() {
   }
 
   return (
-    <>
-        <div id='message'>
+    <div className={cx('wrapper')}>
+        <div id='message' className={cx('message')}>
           {!messages.length && (
             <p>No message.</p>
           )}
@@ -81,14 +88,16 @@ function Home() {
               })
             }
         </div>
-        <form onSubmit={handleOnSubmit}>
+        <form onSubmit={handleOnSubmit} className={cx('chat-box')}>
             <input 
               type='text' value={message ?? ''} 
               onChange={(e) => { setMessage(e.target.value) }}
             />
-            <button type='submit' disabled={!message}>Send</button>
+            <button className={cx('btn-submit',!message&&'disabled')} type='submit' disabled={!message}>
+              <SentIcon className={cx('sent-icon')}/>
+              </button>
         </form>
-    </>
+    </div>
   )
 }
 

@@ -2,7 +2,7 @@
 .wrapper{
     display: flex;
     flex-direction: row;
-    width: 410px;
+    width: var(--sidebar-width);
     height: 100vh;
     border-right: 1px solid #ccc;
 

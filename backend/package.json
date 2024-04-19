@@ -6,7 +6,8 @@
     "dev": "bun run --watch src/index.js"
   },
   "dependencies": {
-    "elysia": "latest"
+    "elysia": "latest",
+    "mysql2": "^3.9.6"
   },
   "devDependencies": {
     "bun-types": "latest"

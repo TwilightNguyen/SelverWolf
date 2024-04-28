@@ -1,4 +1,4 @@
-import { db } from '../../config/db';
+import { db } from '../config/db';
 import Elysia from 'elysia';
 
 export const ctx = new Elysia({

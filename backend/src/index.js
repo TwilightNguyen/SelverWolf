@@ -1,12 +1,12 @@
 import { Elysia, t } from 'elysia';
 
-import {route} from './routes'
+import {routes} from './routes'
 
 //Application
 const app = new Elysia()
   .get('/', () => 'Hello While')
   .get('/helloworld', () => 'Hello World!!')
-  .use(route)
+  .use(routes)
   .state('version', 1)
   .decorate('getDate',() => Date.now())
   .get('/:id',({params: { id }}) => {  

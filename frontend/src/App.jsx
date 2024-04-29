@@ -1,30 +1,32 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import { createContext, useCallback, useMemo, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes/routes';
 import DefaultLayout from './layouts';
 import './App.css';
 
 function App() {
+    
   return (
-      <Router>
-          <Routes>
-              {publicRoutes.map((route, index) => {
-                  let Layout = DefaultLayout;
-                  const Page = route.component;
-                  return (
-                      <Route
-                          key={index}
-                          path={route.path}
-                          element={
-                              <Layout>
-                                  <Page />
-                              </Layout>
-                          }
-                      />
-                  );
-              })}
-          </Routes>
-      </Router>
+    <Router>
+        <Routes>
+            {publicRoutes.map((route, index) => {
+                let Layout = DefaultLayout;
+                const Page = route.component;
+                return (
+                    <Route
+                        key={index}
+                        path={route.path}
+                        element={
+                            <Layout>
+                                <Page />
+                            </Layout>
+                        }
+                    />
+                );
+            })}
+        </Routes>
+    </Router>
   );
 }
 

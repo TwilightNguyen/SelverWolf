@@ -1,54 +1,67 @@
 .wrapper{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
     height: 100%;
 
-    .message{
-        width: 100%;
+    .list-chat{
+        width: 350px;
         height: 100%;
+        border-right: 1px solid #cccccc;
     }
 
-    .chat-box{
-        display: flex;
-        width: 100%;
-        border: none;
-        border-top: 1px solid #cccccc;
+    .content{ 
+        display:  flex;
+        flex-direction: column;
+        width: calc(100% - 350px);
+        height: 100%;
         
-        input{
+        .message{
             width: 100%;
-            padding: 20px;
-            border: none;
-            outline: none;
-            color: #404040;
+            height: 100%;
         }
 
-        .btn-submit{
-            width: 45px;
-            margin: 10px 20px 10px 10px;
-            padding: 5px;
-            background-color: #fff;
-            color: rgba(0,154,255,1);
+        .chat-box{
+            display: flex;
+            width: 100%;
             border: none;
-            border-radius: 3px;
-            font-weight: 600;
-
-            .sent-icon{
-                height: 100%;
+            border-top: 1px solid #cccccc;
+            
+            input{
+                width: 100%;
+                padding: 20px;
+                border: none;
+                outline: none;
+                color: #404040;
             }
-        }
 
-        .btn-submit.disabled{
-            color: #505050;
-        }
+            .btn-submit{
+                width: 45px;
+                margin: 10px 20px 10px 10px;
+                padding: 5px;
+                background-color: #fff;
+                color: rgba(0,154,255,1);
+                border: none;
+                border-radius: 3px;
+                font-weight: 600;
 
-        .btn-submit:hover{
-            background-color: rgba(0,154,255,0.2);
-            cursor: pointer;
-        }
-        .btn-submit.disabled:hover{
-            background-color: #fff;
-            cursor: default;
+                .sent-icon{
+                    height: 100%;
+                }
+            }
+
+            .btn-submit.disabled{
+                color: #505050;
+            }
+
+            .btn-submit:hover{
+                background-color: rgba(0,154,255,0.2);
+                cursor: pointer;
+            }
+            .btn-submit.disabled:hover{
+                background-color: #fff;
+                cursor: default;
+            }
         }
     }
 }

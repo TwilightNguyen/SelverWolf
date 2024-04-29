@@ -5,6 +5,7 @@ const routes = {
     profile: '/:nickname',
     login: '/login',
     setting: '/setting',
+    weather: '/weather',
     about: '/about',
 };
 

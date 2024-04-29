@@ -78,6 +78,10 @@ function Home() {
 
   return (
     <div className={cx('wrapper')}>
+      <div className={cx('list-chat')}>
+        list chat
+      </div>
+      <div className={cx('content')}>
         <div id='message' className={cx('message')}>
           {!messages.length && (
             <p>No message.</p>
@@ -97,6 +101,7 @@ function Home() {
               <SentIcon className={cx('sent-icon')}/>
               </button>
         </form>
+      </div>
     </div>
   )
 }

@@ -1,9 +1,11 @@
-import { Elysia, t } from 'elysia';
+import { Elysia, t } from 'elysia'; 
+import { cors } from '@elysiajs/cors';
 
 import {routes} from './routes'
 
 //Application
 const app = new Elysia()
+  .use(cors())
   .get('/', () => 'Hello While')
   .get('/helloworld', () => 'Hello World!!')
   .use(routes)

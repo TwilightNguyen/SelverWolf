@@ -1,0 +1,29 @@
+.wrapper{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    justify-content: center;
+    align-items: center;
+
+    .login-form{
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        padding: 50px;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+
+    .login-title{
+        margin: 5px 0;
+        font-weight: bold; 
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .email, .password, .btn-login{
+        margin: 5px 0;
+        padding: 5px 10px;
+    }
+}

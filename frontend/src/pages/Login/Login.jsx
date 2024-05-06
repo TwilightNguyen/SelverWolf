@@ -19,7 +19,7 @@ async function loginUser(credentials) {
     }).then((data) => data.json());
 }
 
-function Login() {
+function Login({setToken}) {
     const [email,setEmail] = useState('');
     const [password, setPassword] = useState('');
     
@@ -31,10 +31,11 @@ function Login() {
             password,
         });
 
-        console.log(token);
+        //console.log(token);
         //navigate(-1);
-
-        //setToken(token);
+        
+        setToken(token);
+        location.replace('/');
     };
 
     return <div className={cx('wrapper')}>

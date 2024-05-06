@@ -4,18 +4,20 @@ import React, { useEffect, useState, useRef } from 'react';
 import classNames from 'classnames/bind';
 import { SentIcon } from '../../components/icons';
 
+import {useToken} from '../../store';
 import styles from './Home.module.scss';
+
 
 const cx = classNames.bind(styles);
 
 function Home() {
-  const [username,setUsername] = useState('');
-  const [usernameField,setUsernameField] = useState('');
+  const [username,setUsername] = useState(sessionStorage.getItem('logged_user')); 
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const {token,setToken} = useToken();
   //const [socket, setSocket] = useState();
-  const ws = useRef();
-
+  const ws = useRef(); 
+  
   useEffect(() => {
     ws.current = new WebSocket(`ws://localhost:3200?username=${username}`);
     //setSocket(socket);
@@ -40,12 +42,7 @@ function Home() {
   useEffect(() => {
     if(!ws.current) return;
   }, [ws.current]);
-
-  //Function enter username
-  const handleStartChat = (e) => {
-    e.preventDefault();
-    setUsername(usernameField);
-  }
+ 
 
   //Function handle sent message
   const handleOnSubmit = (e) =>{
@@ -56,25 +53,7 @@ function Home() {
     console.log(`Message sent: ${message}`);
     ws.current.send(message);
     setMessage('');
-  }
-
-  if(!username){
-    return(
-      <main>
-        <form onSubmit={handleStartChat}>
-          <label>
-            Enter a username: 
-            <input 
-              name='username'
-              type='text' value={usernameField ?? ''} 
-              onChange={(e) => { setUsernameField(e.target.value); }}
-            />
-          </label>
-          <button type='submit' disabled={!usernameField}>Start chat</button>
-        </form>
-      </main>
-    )
-  }
+  } 
 
   return (
     <div className={cx('wrapper')}>

@@ -12,12 +12,12 @@ export const usersController = new Elysia()
 .use(ctx)
 .post('/login',async ({db,body})=>{
   const usersList = await db().select().from(users).where(and(eq(users.email, body.email), eq(users.password, body.password)));
-  console.log(usersList);
+  //console.log(usersList);
   return usersList;
 }).get('/:email',
 async ({ db, params: {email} }) => {
   const usersList = await db().select().from(users).where(eq(users.email, email));
-  console.log(usersList);
+  //console.log(usersList);
   return usersList;
 },
 {

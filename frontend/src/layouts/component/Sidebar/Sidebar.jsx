@@ -2,15 +2,17 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
+import { useToken } from '../../../store';
 import styles from './Sidebar.module.scss';
 import { CommentIcon, GearIcon, UserIcon, WeatherIcon } from '../../../components/icons/icons';
 const cx = classNames.bind(styles);
 
 function Sidebar() {  
+    const { token, setToken } = useToken();
     //console.log(valueContext);
     const page = location.pathname.substring 
             (location.pathname.lastIndexOf("/") + 1); 
-    console.log(page);
+    //console.log(page);
     return  (
         <div className={cx('wrapper')}> 
             <div className={cx('top')}>

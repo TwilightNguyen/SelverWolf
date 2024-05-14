@@ -16,9 +16,43 @@
         width: calc(100% - 350px);
         height: 100%;
         
-        .message{
+        .messages{
             width: 100%;
-            height: 100%;
+            height: calc(100vh - 60px);
+            background-color: #cccccc;
+            overflow-y:  scroll;
+
+            .message-receive{
+                display: flex;
+                width: 100%;
+            }
+
+            .message-sent{
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .message-system{
+                width: 100%;
+                display: flex;
+                justify-content: center;
+
+                .message{
+                    background-color: #cccccc;
+                    color: gray;
+                    padding: 0;
+                }
+            }
+
+            .message{
+                width: fit-content;
+                background-color: #fff;
+                color: black;
+                margin: 10px;
+                padding: 10px;
+                border-radius: 5px;
+            }
         }
 
         .chat-box{

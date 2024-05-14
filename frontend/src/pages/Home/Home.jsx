@@ -3,18 +3,16 @@ import React, { useEffect, useState, useRef } from 'react';
 
 import classNames from 'classnames/bind';
 import { SentIcon } from '../../components/icons';
-
-import {useToken} from '../../store';
+ 
 import styles from './Home.module.scss';
 
 
 const cx = classNames.bind(styles);
 
 function Home() {
-  const [username,setUsername] = useState(sessionStorage.getItem('logged_user')); 
+  const username = sessionStorage.getItem('logged_user'); 
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const {token,setToken} = useToken();
+  const [messages, setMessages] = useState([]); 
   //const [socket, setSocket] = useState();
   const ws = useRef(); 
   
@@ -43,6 +41,9 @@ function Home() {
     if(!ws.current) return;
   }, [ws.current]);
  
+  useEffect(() => {
+    document.getElementById('messages').scrollTop = document.getElementById('messages').offsetHeight;
+  },[messages]);
 
   //Function handle sent message
   const handleOnSubmit = (e) =>{
@@ -61,13 +62,15 @@ function Home() {
         list chat
       </div>
       <div className={cx('content')}>
-        <div id='message' className={cx('message')}>
+        <div id='messages' className={cx('messages')}>
           {!messages.length && (
             <p>No message.</p>
           )}
             {
               messages.map((data, i) => { 
-                return <p key={i}  style={data.isAutomated?{color:'gray'}:{color: 'black'}}>{data.message}</p>
+                return <div className={cx(data.isAutomated ? 'message-system' : 'message-receive')}> 
+                  <p className={cx('message')} key={i} >{data.message}</p>
+                </div>
               })
             }
         </div>
@@ -78,7 +81,7 @@ function Home() {
             />
             <button className={cx('btn-submit',!message&&'disabled')} type='submit' disabled={!message}>
               <SentIcon className={cx('sent-icon')}/>
-              </button>
+            </button>
         </form>
       </div>
     </div>

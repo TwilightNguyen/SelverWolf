@@ -1,6 +1,7 @@
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
+import Tippy from '@tippyjs/react';
 
 import { useToken } from '../../../store';
 import styles from './Sidebar.module.scss';
@@ -16,9 +17,14 @@ function Sidebar() {
     return  (
         <div className={cx('wrapper')}> 
             <div className={cx('top')}>
-                <a className={cx('user')}>
-                    <UserIcon className={cx('icon')}/>
-                </a>
+                <Tippy content={<div>Logout</div>} 
+                    placement = 'right-start'
+                    delay = {[null, 300]}
+                > 
+                    <a className={cx('user')}> 
+                        <UserIcon className={cx('icon')}/>
+                    </a>
+                </Tippy>
                 <a href = './' className={cx('item', page===''?'active':'')}>
                     <CommentIcon className={cx('icon')}/> 
                 </a>

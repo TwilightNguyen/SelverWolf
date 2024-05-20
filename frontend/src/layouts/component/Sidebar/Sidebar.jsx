@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 
-import { useToken } from '../../../store';
+//import { useToken } from '../../../store';
 import styles from './Sidebar.module.scss';
 import { CommentIcon, GearIcon, UserIcon, WeatherIcon } from '../../../components/icons/icons';
 const cx = classNames.bind(styles);
 
 function Sidebar() {  
-    const { token, setToken } = useToken();
+    //const { token, setToken } = useToken();
     //console.log(valueContext);
     const page = location.pathname.substring 
             (location.pathname.lastIndexOf("/") + 1); 

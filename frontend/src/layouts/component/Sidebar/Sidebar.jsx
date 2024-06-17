@@ -28,11 +28,11 @@ function Sidebar() {
                 <a href = './' className={cx('item', page===''?'active':'')}>
                     <CommentIcon className={cx('icon')}/> 
                 </a>
+            </div>
+            <div className={cx('bottom')}>
                 <a href = './weather' className={cx('item', page==='weather'?'active':'')} >
                     <WeatherIcon className={cx('icon')}/>
                 </a>
-            </div>
-            <div className={cx('bottom')}>
                 <a href = './setting' className={cx('item',page==='setting'?'active':'')} >
                     <GearIcon className={cx('icon')}/>
                 </a>

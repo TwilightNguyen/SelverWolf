@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 
 import { user } from "./user";
 import { message } from './message';
+import { chat } from "./chat";
 
 //Define Plugin
 export const routes = new Elysia()
@@ -10,6 +11,7 @@ export const routes = new Elysia()
         .get('/','')
         .use(user)
         .use(message)
+        .use(chat)
     );
     
 

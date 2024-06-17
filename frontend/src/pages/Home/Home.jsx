@@ -68,7 +68,7 @@ function Home() {
               <div className={cx('icon')}>
                 <SearchIcon className={cx('search-icon')} />
               </div>
-              <input />
+              <input className={cx('search-input')}  type='text' placeholder='Search'/>
             </div>
             <div className={cx('add-friend')}>
               <UserIcon className={cx('add-friend-icon')} />

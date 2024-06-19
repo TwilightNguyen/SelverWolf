@@ -4,7 +4,7 @@
 //findChat
 
 import { and, like } from 'drizzle-orm';
-import { chats, selectChatSchema } from '../../config/db/schema/chat'; 
+import { chats } from '../../config/db/schema/chat'; 
 
 export const createChat = async(db,body)=>{
     try{
@@ -17,7 +17,6 @@ export const createChat = async(db,body)=>{
                 like(chats.members,`%,${body.firstId},%`),
                 like(chats.members,`%,${body.secondId},%`)
         ));
-
         
         if(!!Object.keys(chatGroup).length) {
             console.log(chatGroup);

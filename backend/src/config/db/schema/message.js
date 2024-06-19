@@ -1,16 +1,15 @@
 
 
-import { mysqlTable } from 'drizzle-orm/mysql-core'; 
+import { datetime, mysqlTable } from 'drizzle-orm/mysql-core'; 
 import { timestamp, varchar } from 'drizzle-orm/pg-core';
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
 
 // * message Table
-export const messages = mysqlTable('w_message', {  
+export const messages = mysqlTable('w_message', { 
   chatId: varchar('chat_id',{length: 100}),
-  senderId: varchar('user_url', {length: 100}),
-  text: varchar('user_pass', {length: 100}),
-},{
-    timestamps:true,
+  senderId: varchar('user_id', {length: 100}),
+  content: varchar('message_content', {length: 100}),
+  timestamp: datetime('message_timestamp')
 });
 
 export const selectMessageSchema = createSelectSchema(messages);

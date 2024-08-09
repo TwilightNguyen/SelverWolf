@@ -1,8 +1,9 @@
 
 
 import config from '../config';
-import Home from '../pages/Home/Home';
-import Profile from '../pages/Profile/Profile';
+import Home from '../pages/Home';
+import Contact from '../pages/Contact';
+import Profile from '../pages/Profile';
 import Login from '../pages/Login';
 import Setting from '../pages/Setting';
 import Weather from '../pages/Weather';
@@ -12,6 +13,7 @@ import About from '../pages/About';
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.profile, component: Profile },
+    { path: config.routes.contact, component: Contact },
     { path: config.routes.login, component: Login },
     { path: config.routes.setting, component: Setting },
     { path: config.routes.weather, component: Weather },

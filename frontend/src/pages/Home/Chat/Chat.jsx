@@ -18,7 +18,7 @@ function Chat({username,chatGroupID}) {
   const ws = useRef(); 
   
   useEffect(() => {
-    ws.current = new WebSocket(`ws://localhost:3200?username=${username}`);
+    ws.current = new WebSocket(`ws://localhost:3200/?username=${username}`);
     //setSocket(socket);
     ws.current.onopen = () => {
       console.log('socket opened.');

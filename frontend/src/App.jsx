@@ -22,14 +22,27 @@ function App() {
                     Page = Login;
                 }
 
+
+                if(Page === Login){
+                    Layout = ({children}) => {
+                        return <>
+                            {children}
+                        </>
+                    };
+                }
+
                 return (
                     <Route
                         key={index}
                         path={route.path}
+                        // element = {
+                        //     route.component === Login || !token ? <Page setToken={setToken} /> : <Layout> <Page setToken={setToken}/> </Layout>
+                        // }
                         element={
+                            
                             <Layout>
-                                {route.component === Login && !token && <Page setToken={setToken} />}
-                                {route.component !== Login && <Page setToken={setToken} />}
+                                {Page === Login && <Page setToken={setToken} />}
+                                {Page !== Login && <Page setToken={setToken} />}
                             </Layout>
                         }
                     />

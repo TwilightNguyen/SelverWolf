@@ -6,9 +6,9 @@
     align-items: center;
     width: var(--sidebar-width);
     height: 100vh;
-    background: linear-gradient(rgb(150, 50, 255), rgb(50, 50, 252));
+    //background: linear-gradient(rgb(150, 50, 255), rgb(50, 50, 252));
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 100, 255, 0.3);
     color: rgb(255,255,255);
-    padding-top: 10px;
 
     .top, .bottom{
         display: flex;
@@ -18,20 +18,25 @@
 
         .user{
             position: relative;
-            width: calc(var(--sidebar-width) - 10px);
-            height: calc(var(--sidebar-width) - 10px);
-            margin: 5px;
-            background-color: #ccc;
-            border: 2px solid #fff;
+            width: var(--sidebar-width);
+            height: calc(var(--sidebar-width) + 38px);
+            
+            padding: 19px 0;
+            //margin: 5px;
             cursor: pointer;
-            border-radius: 1000px;
             overflow: hidden;
-
+            background-color: rgba(0, 100, 255, 0.5);
+            border-bottom: 2px solid rgba(0, 100, 255, 0.6);
+            
             .icon{
                 position:absolute;
-                width: 100%;
-                height: 100%;
+                width: calc(100% - 10px);
+                height: calc(100% - 46px);
                 color: #fff;
+                border: 2px solid #fff;
+                margin: 5px;
+                border-radius: 1000px;
+                background-color: #ccc;
             }
         }
 
@@ -42,25 +47,33 @@
             user-select: none;
             cursor: pointer;
             
-            
-            &.active{
-                background-color: rgb(100, 50, 255);
-            }
-
-            &:hover{
-                background-color: rgb(100, 90, 255);
-            }
-
-            &:active{
-                background-color: rgb(100, 80, 255);
-            }
-
             .icon{
                 width: 100%;
                 height: 100%;
-                color: #fff;
+                color: #707070;
                 user-select: none;
             }
+
+            &.active{
+                background-color: rgba(0, 100, 255,.2);
+
+                .icon{
+                    color: rgba(0, 100, 255, 1);
+                }
+            }
+
+            &:hover{
+                background-color: rgba(0, 100, 255, .7);
+                .icon{
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+
+            &:active{
+                background-color: rgba(0, 100, 255, .4);
+            }
+
+            
         }
     }
 }

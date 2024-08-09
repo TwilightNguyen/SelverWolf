@@ -29,12 +29,16 @@ function Home() {
   useEffect(() => {
     handleChatList();
   },[]);
-  
+  console.log(chatList);
   return (
     <div className={cx('wrapper')}>
       
       <div className={cx('chats-sidebar')}> 
         <div className={cx('header')}>
+          <div className={cx('username')}>
+            {username}
+          </div>
+          
           <div className={cx('search-box')}>
             <div className={cx('search')}>
               <div className={cx('icon')}>
@@ -50,26 +54,15 @@ function Home() {
             </div>
           </div>
           <div className={cx('filter')}>
-            <div className={cx('left')}>
-              <div className={cx('all',!filterMessage&&'active')}
-                onClick={() => setFilterMessage(false)}
-              >
-                All
-              </div>
-              <div className={cx('unread',filterMessage&&'active')}
-                onClick={() => setFilterMessage(true)}
-              >
-                Unread
-              </div>
+            <div className={cx('all',!filterMessage&&'active')}
+              onClick={() => setFilterMessage(false)}
+            >
+              All
             </div>
-            <div className={cx('right')}>
-              <div className={cx('classify')}>
-                Classify 
-                <div className={cx('icon')}></div>
-              </div>
-              <div className={cx('more')}>
-                <EllipsisIcon className={cx('more-icon')} />
-              </div>
+            <div className={cx('unread',filterMessage&&'active')}
+              onClick={() => setFilterMessage(true)}
+            >
+              Unread
             </div>
           </div>
         </div>
@@ -89,8 +82,8 @@ function Home() {
             })
           }
         </div>
-    </div>
-      <Chat username = {username} chatGroupID = {1}/>
+      </div>
+      <Chat username = {username} chatGroupID = {chat}/>
     </div>
   )
 }

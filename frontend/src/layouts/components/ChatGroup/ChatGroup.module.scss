@@ -8,15 +8,15 @@
     cursor: pointer;
 
     &.active{
-        background-color: rgba(100, 50, 255,.1);
+        background-color: rgba(0, 100, 255, 0.1);
     }
 
     &:hover{
-        background-color: rgba(100, 50, 255,.05);
+        background-color: rgba(0, 100, 255,.05);
     }
 
     &:active{
-        background-color: rgba(100, 50, 255,.1);
+        background-color: rgba(0, 100, 255, 0.08);
     }
 
     .avatar{
@@ -51,13 +51,13 @@
         }
         .username{
             color: #505050;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 500;
         }
 
         .message{
             color: #888888;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
         }
     }

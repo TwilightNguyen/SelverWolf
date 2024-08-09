@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import className from 'classnames/bind';
 
 import { postRequest } from '../../utils/services';
@@ -16,6 +16,13 @@ function Login({setToken}) {
     const [email,setEmail] = useState('');
     const [password, setPassword] = useState('');
     
+    
+    // useEffect(()=>{
+    //     localStorage.removeItem('logged_in');
+    //     localStorage.removeItem('logged_user');
+    //     localStorage.removeItem('logged_email');
+    // },[]);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         
@@ -24,7 +31,7 @@ function Login({setToken}) {
             password,
         });
 
-        //console.log(token);
+        console.log(token);
         //navigate(-1);
         
         setToken(token);

@@ -1,12 +1,17 @@
 
 :root{
     --sidebar-width: 64px;
+    --text-color-default: rgb(63, 63, 63);
 }
 
 *{
+    box-sizing: border-box;
+}
+
+body{
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     font-size: 1.0rem;
     font-family: sans-serif;
+    color: var(--text-color-default);
 }

@@ -8,8 +8,7 @@ import style from './Chat.module.scss';
 
 const cx = classNames.bind(style);
 
-function Chat({username,chatGroupID}) {
-  
+function Chat({username,groupId}) {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]); 
   // const [filterMessage, setFilterMessage] = useState(false);
@@ -18,7 +17,8 @@ function Chat({username,chatGroupID}) {
   const ws = useRef(); 
   
   useEffect(() => {
-    ws.current = new WebSocket(`ws://localhost:3200/?username=${username}`);
+    setMessages([]);
+    ws.current = new WebSocket(`ws://localhost:3200/?username=${username}&groupId=${groupId}`);
     //setSocket(socket);
     ws.current.onopen = () => {
       console.log('socket opened.');
@@ -30,13 +30,12 @@ function Chat({username,chatGroupID}) {
     
     ws.current.onmessage = (ev) => {
       setMessages(prev => [...prev ?? [], JSON.parse(ev.data)]);
-      // console.log(`message received: ${ev.data}`); 
     }
 
     return () => {
       ws.current?.close();
     }
-  }, [username]);
+  }, [groupId]);
 
   useEffect(() => {
     if(!ws.current) return;

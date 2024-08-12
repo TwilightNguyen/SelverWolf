@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
-import { EllipsisIcon, SearchIcon, UserGroupIcon, UserIcon } from '../../components/icons';
+import { SearchIcon, UserGroupIcon, UserIcon } from '../../components/icons';
 import { getRequest } from '../../utils/services';
 import ChatGroup from '../../layouts/components/ChatGroup';
 import Chat  from './Chat';
@@ -29,7 +29,7 @@ function Home() {
   useEffect(() => {
     handleChatList();
   },[]);
-  console.log(chatList);
+  
   return (
     <div className={cx('wrapper')}>
       
@@ -83,7 +83,7 @@ function Home() {
           }
         </div>
       </div>
-      <Chat username = {username} chatGroupID = {chat}/>
+      <Chat username = {username} groupId = {chat}/>
     </div>
   )
 }

@@ -1,9 +1,10 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import className from 'classnames/bind';
 
 import { postRequest } from '../../utils/services';
 
+// import images from '../../assets/images';
 import styles from './Login.module.scss';
 
 const cx = className.bind(styles);

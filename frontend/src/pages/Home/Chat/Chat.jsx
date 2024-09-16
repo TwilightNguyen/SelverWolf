@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
+import PropTypes from 'prop-types';
 import classNames from "classnames/bind";
 
 import { SentIcon } from '../../../components/icons';
@@ -55,34 +56,39 @@ function Chat({username,groupId}) {
     ws.current.send(message);
     setMessage('');
   } 
-return(
-  <div className={cx('content')}>
-      <div id='messages' className={cx('messages')}>
-        {!messages.length && (
-          <p>No message.</p>
-        )}
-          {
-            messages.map((data, i) => { 
-              return <div 
-                key={i} 
-                className={cx(data.isAutomated ? 'message-system' : 'message-receive')}
-              > 
-                <p className={cx('message')}  >{data.message}</p>
-              </div>
-            })
-          }
+  return(
+    <div className={cx('content')}>
+        <div id='messages' className={cx('messages')}>
+          {!messages.length && (
+            <p>No message.</p>
+          )}
+            {
+              messages.map((data, i) => { 
+                return <div 
+                  key={i} 
+                  className={cx(data.isAutomated ? 'message-system' : 'message-receive')}
+                > 
+                  <p className={cx('message')}  >{data.message}</p>
+                </div>
+              })
+            }
+        </div>
+        <form onSubmit={handleOnSubmit} className={cx('chat-box')}>
+            <input 
+              type='text' value={message ?? ''} 
+              onChange={(e) => { setMessage(e.target.value) }}
+            />
+            <button className={cx('btn-submit',!message&&'disabled')} type='submit' disabled={!message}>
+              <SentIcon className={cx('sent-icon')}/>
+            </button>
+        </form>
       </div>
-      <form onSubmit={handleOnSubmit} className={cx('chat-box')}>
-          <input 
-            type='text' value={message ?? ''} 
-            onChange={(e) => { setMessage(e.target.value) }}
-          />
-          <button className={cx('btn-submit',!message&&'disabled')} type='submit' disabled={!message}>
-            <SentIcon className={cx('sent-icon')}/>
-          </button>
-      </form>
-    </div>
-);
+  );
 }
+
+Chat.propTypes = {
+  username: PropTypes.string,
+  groupId: PropTypes.string
+};
 
 export default Chat;

@@ -1,4 +1,5 @@
 
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import Sidebar from '../components/Sidebar';
@@ -15,6 +16,10 @@ function DefaultLayout({ children }) {
             </div>
         </div> 
     );
+}
+
+DefaultLayout.propTypes = {
+    children: PropTypes.node.isRequired
 }
 
 export default DefaultLayout;

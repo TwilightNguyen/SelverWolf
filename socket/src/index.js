@@ -1,6 +1,5 @@
 
-import { ServerWebSocket } from 'bun';
-import figlet from 'figlet'; 
+
 import KSUID from 'ksuid';
 
 
@@ -37,6 +36,9 @@ const server = Bun.serve({
     
     websocket: {
         open(ws) {
+            //Ip address
+            // console.log(ws.remoteAddress);
+
             openSocket.push(ws);
             const msg = `${ws.data.username} has entered the chat.`;
             sendToEveryone({message:msg, isAutomated: true}, ws.data.groupId);
@@ -49,7 +51,7 @@ const server = Bun.serve({
         },
         close(ws, code, message) {
             const msg = `${ws.data.username} has left the chat.`;
-            sendToEveryone({message:msg, isAutomated: true},ws.data.groupId);
+            sendToEveryone({message:msg, isAutomated: true}, ws.data.groupId);
             const uId = ws.data?.id;
             console.log(uId, 'closed');
             openSocket = openSocket.filter(ws => ws.data.id !== uId);

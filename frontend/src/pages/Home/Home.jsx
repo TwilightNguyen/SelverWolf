@@ -15,24 +15,53 @@ async function loadChatList(userId) {
   return await getRequest(`/chats/${userId}`);
 }
 
+async function loadUserInfo(id) {
+  return await getRequest(`/user/${id}/false`);
+}
+
+
 function Home() {
   const username = localStorage.getItem('logged_user'); 
+  const userId = localStorage.getItem('logged_id');
+  //const [userId, setUserId] = useState(localStorage.getItem('logged_id'));
   const [chatList, setChatList] = useState([]);
   const [filterMessage, setFilterMessage] = useState(false);
-  const [chat, setChat] = useState(0);
-
-  const handleChatList = async () => {
-    const result = await loadChatList(1);
-    setChatList(result);
+  const [chat, setChat] = useState(-1);
+  
+  const handleChatList = async (uid) => {
+    const groups = await loadChatList(uid);
+    // setChatList([]);
+    var temp = [];
+    await groups
+    .map(async (value)=>{
+      var array = value.members
+        .split(",")
+        .map(Number)
+        .find(id => id != 0 && id != uid);
+      
+      var res = await loadUserInfo(array);
+      
+      if(res.length > 0)
+      {
+        temp = [...temp,res[0]];
+        setChatList(temp);
+      }
+    });
   }
 
+  // handleChatList(userId);
+  //console.log(chatList);
   useEffect(() => {
-    handleChatList();
-  },[]);
-  
+    handleChatList(userId);
+
+    //Cleanup
+    return () => {
+      setChatList([]);
+    }
+  }, [userId]);
+
   return (
     <div className={cx('wrapper')}>
-      
       <div className={cx('chats-sidebar')}> 
         <div className={cx('header')}>
           <div className={cx('username')}>
@@ -54,12 +83,12 @@ function Home() {
             </div>
           </div>
           <div className={cx('filter')}>
-            <div className={cx('all',!filterMessage&&'active')}
+            <div className={cx('all', !filterMessage && 'active')}
               onClick={() => setFilterMessage(false)}
             >
               All
             </div>
-            <div className={cx('unread',filterMessage&&'active')}
+            <div className={cx('unread', filterMessage && 'active')}
               onClick={() => setFilterMessage(true)}
             >
               Unread
@@ -68,22 +97,22 @@ function Home() {
         </div>
         <div className={cx('items')}>
           {
-            chatList.map((value,index)=>{
+            chatList.length > 0 && chatList.map((value, index)=>{
               return (
                 <ChatGroup 
                   key={index}
                   avatar={'Avatar'} 
-                  username={'Username ' + index} 
-                  message={'Message '+ index}
-                  className={chat===index?'active':''}
-                  onClick={()=>{setChat(index);}}
+                  username={value.username} 
+                  message={'Message '+ value.id}
+                  className={[chat===value.id ? 'active' : '']}
+                  onClick={()=>{setChat(value.id);}}
                 />
               );
             })
           }
         </div>
       </div>
-      <Chat username = {username} groupId = {chat}/>
+        {chat > -1 && <Chat username = {username} groupId = {chat.toString()}/>}
     </div>
   )
 }

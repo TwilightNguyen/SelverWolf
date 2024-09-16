@@ -12,7 +12,7 @@
         width: 400px;
         padding: 50px;
         border: 1px solid rgba(0, 100, 255, .1);
-        box-shadow: inset 0px 0px 50px 0px rgba(0, 100, 255, .1);
+        box-shadow: inset 0px 0px 20px 0px rgba(0, 100, 255, .5);
         border-radius: 5px;
 
         
@@ -63,7 +63,6 @@
             &:-webkit-autofill:focus{
                 border: 2px solid rgba(0, 100, 255, 0.5);
             }
-
         }
 
         a{

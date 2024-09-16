@@ -1,8 +1,9 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq,or } from 'drizzle-orm';
 // import Elysia, { t } from 'elysia';
 
 // import { ctx } from '../../context';
 import { users } from '../../config/db/schema/user';
+import { error } from 'elysia';
 
 // const responseSchema = t.Object({
 //   message: t.String(),
@@ -23,14 +24,22 @@ export const login = async (db,body) => {
     return usersList;
 };
 
-export const getUser = async(db,email) => {
-  const usersList = 
-    await db()
-      .select()
-      .from(users)
-      .where(
-        eq(users.email, email)
-      );
+export const getUser = async(db, id, email) => {
+  try{
+    const usersList = 
+      await db()
+        .select()
+        .from(users)
+        .where(
+          or(
+            email&&eq(users.email, email),
+            id&&eq(users.id, +id)
+          )
+        );
     //console.log(usersList);
     return usersList;
+  }
+  catch(error){
+    return error;
+  }
 }

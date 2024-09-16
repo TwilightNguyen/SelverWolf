@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 import { messages } from '../../config/db/schema/message'; 
 
 //Create Message
-export const createMessage = async(db,body)=>{
+export const createMessage = async(db, body)=>{
     try{
         const response = await db().insert(messages).values({
             chatId: `${body.chatId}`,

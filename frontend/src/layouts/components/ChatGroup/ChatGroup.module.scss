@@ -4,10 +4,12 @@
     flex-direction: row;
     height: 75px;
     width: 100%;
+    border-left: 5px solid rgba(0, 100, 255,.05);
     user-select: none;
     cursor: pointer;
 
     &.active{
+        border-left: 5px solid rgb(50, 205, 50);
         background-color: rgba(0, 100, 255, 0.1);
     }
 
@@ -16,6 +18,7 @@
     }
 
     &:active{
+        border-left: 5px solid rgba(0, 100, 255,.08);
         background-color: rgba(0, 100, 255, 0.08);
     }
 

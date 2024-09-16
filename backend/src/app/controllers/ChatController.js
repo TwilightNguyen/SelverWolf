@@ -3,8 +3,9 @@
 //findUserChats
 //findChat
 
-import { and, like } from 'drizzle-orm';
+import { and, eq, like } from 'drizzle-orm';
 import { chats } from '../../config/db/schema/chat'; 
+import { users } from '../../config/db/schema/user'; 
 
 export const createChat = async(db,body)=>{
     try{
@@ -38,11 +39,12 @@ export const createChat = async(db,body)=>{
 
 export const findUserChats = async(db,userId)=>{
     try{
-        const chatGroup = await db()
+        const chatGroups = await db()
         .select()
         .from(chats)
         .where(like(chats.members,`%,${userId},%`));
-        return chatGroup;
+        
+        return chatGroups;
     }catch(error){
         return error;
         //res.status( 500).json(error);

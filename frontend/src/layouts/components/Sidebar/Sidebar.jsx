@@ -7,7 +7,6 @@ import {
     CommentIcon,
     GearIcon, 
     UserIcon, 
-    WeatherIcon, 
     ContactsIcon
  } from '../../../components/icons/icons';
 const cx = classNames.bind(styles);

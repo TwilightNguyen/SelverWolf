@@ -1,4 +1,5 @@
 
+import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import styles from './ChatGroup.module.scss';
@@ -19,6 +20,14 @@ function ChatGroup({avatar = 'default', username, message, className, onClick}) 
             </div>
         </div>
     );
+}
+
+ChatGroup.propTypes = {
+  avatar: PropTypes.string,
+  username: PropTypes.string,
+  message: PropTypes.string,
+  className: PropTypes.array,
+  onClick: PropTypes.func
 }
 
 export default ChatGroup;

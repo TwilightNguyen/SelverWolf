@@ -16,8 +16,8 @@ export const user = new Elysia()
       response: t.Array(selectUserSchema),
     },
   )
-  .get('/:email', 
-    ({db, params: {email}}) => UsersController.getUser(db,email),
+  .get('/:id/:email', 
+    ({db, params: {id, email}}) => UsersController.getUser(db,id,email),
     {
       response: t.Array(selectUserSchema),
     },)

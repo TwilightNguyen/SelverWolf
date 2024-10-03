@@ -5,7 +5,6 @@
 
 import { and, eq, like } from 'drizzle-orm';
 import { chats } from '../../config/db/schema/chat'; 
-import { users } from '../../config/db/schema/user'; 
 
 export const createChat = async(db,body)=>{
     try{

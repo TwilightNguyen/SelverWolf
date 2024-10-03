@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 
-import { SearchIcon, UserGroupIcon, UserIcon } from '../../components/icons';
+import { SearchIcon, UserGroupIcon, UserIcon } from '../../components/Icons';
 import { getRequest } from '../../utils/services';
 import ChatGroup from '../../layouts/components/ChatGroup';
 import Chat  from './Chat';
@@ -27,14 +27,17 @@ function Home() {
   const [chatList, setChatList] = useState([]);
   const [filterMessage, setFilterMessage] = useState(false);
   const [chat, setChat] = useState(-1);
+  const [groupID,setGroupID] = useState([]);
   
   const handleChatList = async (uid) => {
     const groups = await loadChatList(uid);
     // setChatList([]);
     var temp = [];
+    var group = [];
+    
     await groups
     .map(async (value)=>{
-      var array = value.members
+      var array = await value.members
         .split(",")
         .map(Number)
         .find(id => id != 0 && id != uid);
@@ -44,7 +47,9 @@ function Home() {
       if(res.length > 0)
       {
         temp = [...temp,res[0]];
+        group = [...group,value.id];
         setChatList(temp);
+        setGroupID(group);
       }
     });
   }
@@ -63,11 +68,10 @@ function Home() {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('chats-sidebar')}> 
+        <div className={cx('username')}>
+          {username}
+        </div>
         <div className={cx('header')}>
-          <div className={cx('username')}>
-            {username}
-          </div>
-          
           <div className={cx('search-box')}>
             <div className={cx('search')}>
               <div className={cx('icon')}>
@@ -94,25 +98,27 @@ function Home() {
               Unread
             </div>
           </div>
-        </div>
-        <div className={cx('items')}>
-          {
-            chatList.length > 0 && chatList.map((value, index)=>{
-              return (
-                <ChatGroup 
-                  key={index}
-                  avatar={'Avatar'} 
-                  username={value.username} 
-                  message={'Message '+ value.id}
-                  className={[chat===value.id ? 'active' : '']}
-                  onClick={()=>{setChat(value.id);}}
-                />
-              );
-            })
-          }
+          <div className={cx('items')}>
+            {
+              chatList.length > 0 && chatList.map((value, index)=>{
+                return (
+                  <ChatGroup 
+                    key={index}
+                    avatar={'Avatar'} 
+                    username={value.username} 
+                    message={'Message '+ value.id}
+                    className={[chat===groupID[index] ? 'active' : '']}
+                    onClick={()=>{
+                      setChat(groupID[index]);
+                    }}
+                  />
+                );
+              })
+            }
+          </div>
         </div>
       </div>
-        {chat > -1 && <Chat username = {username} groupId = {chat.toString()}/>}
+        {chat > -1 && <Chat userId={+userId} username = {username} groupId = {chat.toString()}/>}
     </div>
   )
 }

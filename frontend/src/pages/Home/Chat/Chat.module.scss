@@ -2,25 +2,82 @@
     display:  flex;
     flex-direction: column;
     width: calc(100% - 350px);
-    height: 100vh;
+    height: calc(100vh - 20px);
+    border-radius: 10px;
+    margin: 10px 10px 10px 0;
     overflow: hidden;
     
     .messages{
         width: 100%;
         box-shadow: inset 0px 0px 1000px 0px rgba(0, 0, 0, .1);
+        margin-bottom: 10px;
+        border-radius: 10px;
         overflow-y:  scroll;
         overflow-x: hidden;
         flex-grow: 1;
+        scroll-snap-align: end;
+        scroll-margin-bottom: 0;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        /* Track */
+        &::-webkit-scrollbar-track {
+            border-radius: 10px;
+        }
+        
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: rgb(190, 190, 190); 
+            border-radius: 10px;
+        }
+        
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgb(131, 131, 131); 
+        }
+        
+        div{
+            scroll-behavior: smooth;
+        }
 
         .message-receive{
             display: flex;
+            position: relative;
             width: 100%;
+            height: fit-content;
+
+            .avatar{
+                width: 40px;
+                height: 40px;
+                margin: 8px;
+            }
+
+            .message{
+                display: flex;
+                justify-content: flex-start;
+                margin-left: 56px;
+                align-items: center;
+                max-width: calc(90% - 56px);
+                background: rgb(255, 255, 255);
+                border: 1px solid rgba(0, 100, 255, 0.3);
+            }
+
+            .avatar + .message{
+                margin-left: 0px;
+            }
         }
 
         .message-sent{
             display: flex;
             width: 100%;
             justify-content: flex-end;
+            
+            .message{
+                background: rgba(0, 100, 255, 0.1);
+                border: 1px solid rgba(0, 100, 255, 0.3);
+            }
         }
 
         .message-system{
@@ -44,7 +101,7 @@
             color: black;
             margin: 2px;
             padding: 10px;
-            overflow-wrap: break-word;
+            overflow-wrap: anywhere;
             border-radius: 5px;
         }
     }
@@ -53,8 +110,9 @@
         display: flex;
         width: 100%;
         border: none;
-        border-top: 1px solid rgba(0, 100, 255, .3);
         flex-grow: 0;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 100, 255, .3);
         
         input{
             display: flex;
@@ -64,17 +122,19 @@
             color: #404040;
             font-size: 16px;
             flex-grow: 1;
+            border-radius: 10px;
         }
 
         .btn-submit{
             width: 35px;
-            margin: 7px 20px 7px 7px;
+            margin: 7px;
             padding: 5px;
             background-color: #fff;
             color: rgba(0, 100, 255, 1);
             border: none;
-            border-radius: 3px;
             font-weight: 600;
+            border-left: 1px solid rgba(0, 100, 255, .3);
+            border-radius: 3px;
             flex-grow: 0;
 
             .sent-icon{

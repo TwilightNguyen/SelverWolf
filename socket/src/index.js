@@ -1,7 +1,5 @@
 
-
 import KSUID from 'ksuid';
-
 
 const port = process.env.PORT || 5000;
 
@@ -22,12 +20,13 @@ const server = Bun.serve({
 
         //get username
         const url = new URL(req.url);
+        const userId = url.searchParams.get('userId');
         const username = url.searchParams.get('username');
         const groupId = url.searchParams.get('groupId');
 
         //upgrade the request to websocket
         if(server.upgrade(req, {
-            data: {id: uId.string, groupId: groupId, username: username}
+            data: {id: uId.string, groupId: groupId, userId: userId, username: username}
         })){
             return;
         } 
@@ -45,7 +44,7 @@ const server = Bun.serve({
             // retrieve previous unread messages from db
         },
         message(ws, message) {
-            sendToEveryone({ message: `${ws.data.username}: ${message}`, isAutomated: false}, ws.data.groupId);
+            sendToEveryone({ userId: `${ws.data.userId}`, message: `${message}`, isAutomated: false}, ws.data.groupId);
             // server.publish(ws.data.groupId, data = {message: `${ws.data.username}: ${message}`, isAutomated: false})
             // persist data in db
         },

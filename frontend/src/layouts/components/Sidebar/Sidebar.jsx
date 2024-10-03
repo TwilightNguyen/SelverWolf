@@ -8,7 +8,7 @@ import {
     GearIcon, 
     UserIcon, 
     ContactsIcon
- } from '../../../components/icons/icons';
+ } from '../../../components/Icons';
 const cx = classNames.bind(styles);
 
 function Sidebar() {  
@@ -19,10 +19,11 @@ function Sidebar() {
     //console.log(page);
     return  (
         <div className={cx('wrapper')}> 
+            <div className={cx('user')}> 
+                <UserIcon className={cx('icon')}/>
+            </div>
             <div className={cx('top')}>
-                <a className={cx('user')}> 
-                    <UserIcon className={cx('icon')}/>
-                </a>
+                
                 <a href = './' className={cx('item', page===''?'active':'')}>
                     <CommentIcon className={cx('icon')}/> 
                 </a>

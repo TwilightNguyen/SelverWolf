@@ -2,6 +2,7 @@
 .wrapper{
     display: flex;
     flex-direction: row;
+    background: rgba(0, 100, 255, 0.05);
 
     .chat-content{
         width: calc(100% - var(--sidebar-width));

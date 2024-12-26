@@ -16,6 +16,12 @@ export const user = new Elysia()
       response: t.Array(selectUserSchema),
     },
   )
+  .post('/register', 
+    ({db,body}) => UsersController.register(db,body),
+    {
+      response: t.Array(selectUserSchema),
+    },
+  )
   .get('/:id/:email', 
     ({db, params: {id, email}}) => UsersController.getUser(db,id,email),
     {

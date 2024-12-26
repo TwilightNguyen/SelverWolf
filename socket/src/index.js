@@ -26,31 +26,69 @@ const server = Bun.serve({
 
         //upgrade the request to websocket
         if(server.upgrade(req, {
-            data: {id: uId.string, groupId: groupId, userId: userId, username: username}
+            data: {
+                id: uId.string, 
+                groupId: groupId, 
+                userId: userId, 
+                username: username
+            }
         })){
             return;
         } 
         return new Response('Update failed', {status: 500});
     },
-    
     websocket: {
         open(ws) {
             //Ip address
             // console.log(ws.remoteAddress);
-
             openSocket.push(ws);
             const msg = `${ws.data.username} has entered the chat.`;
-            sendToEveryone({message:msg, isAutomated: true}, ws.data.groupId);
+            sendToEveryone({
+                type: 'onText',
+                message:msg, 
+                isAutomated: true
+            }, ws.data.groupId);
             // retrieve previous unread messages from db
         },
         message(ws, message) {
-            sendToEveryone({ userId: `${ws.data.userId}`, message: `${message}`, isAutomated: false}, ws.data.groupId);
+            message = JSON.parse(message);
+            if(message.type==='onText'){
+                sendToEveryone({ 
+                    type: 'onText',
+                    from: `${ws.data.userId}`, 
+                    message: `${message.data}`,
+                    isAutomated: false
+                }, ws.data.groupId);
+            }else if(message.type==='onCall'){
+                sendToEveryone({ 
+                    type: 'onCall',
+                    signal: message.signal, 
+                    from: `${ws.data.userId}`, 
+                    name: `${ws.data.username}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
+            }else if(message.type==='onAnswerCall'){
+                sendToEveryone({ 
+                    type: 'onAnswerCall', 
+                    signal: message.signal, 
+                    from: `${ws.data.userId}`, 
+                    name: `${ws.data.username}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
+            }
+            
             // server.publish(ws.data.groupId, data = {message: `${ws.data.username}: ${message}`, isAutomated: false})
             // persist data in db
         },
         close(ws, code, message) {
             const msg = `${ws.data.username} has left the chat.`;
-            sendToEveryone({message:msg, isAutomated: true}, ws.data.groupId);
+
+            sendToEveryone({
+                type: 'onText',
+                message:msg, 
+                isAutomated: true
+            }, ws.data.groupId);
+
             const uId = ws.data?.id;
             console.log(uId, 'closed');
             openSocket = openSocket.filter(ws => ws.data.id !== uId);
@@ -62,3 +100,4 @@ const server = Bun.serve({
 });
 
 console.log(`Listening to port:${server.port}`);
+

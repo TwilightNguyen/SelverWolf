@@ -6,7 +6,7 @@ import {routes} from './routes'
 //Application
 const app = new Elysia()
   .use(cors())
-  .get('/', () => 'Hello While')
+  .get('/', () => 'Hello Joker')
   .get('/helloworld', () => 'Hello World!!')
   .use(routes)
   .state('version', 1)
@@ -18,21 +18,6 @@ const app = new Elysia()
       id: t.Numeric()
     })
   });
-
-  // app.post('/post', ({ body }) => {
-  //   //set.status = 201
-  //   return body
-  // });
-
-
-// app.group('v1',app=> app
-//   .get('/', () => 'version 1')
-//   .group('/products', app => app)
-//   .post('/', () => 'Create Product')
-//   .get('/:id', () => 'GET PRODUCT BY ID')
-//   .put('/:id', () => 'Update product by ID')
-//   .delete('/:id', () => 'Delete Product by ID')
-// );
 
 app.listen(3000, (req, res)=>{
   console.log(

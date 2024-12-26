@@ -5,24 +5,35 @@
     background-color: rgba(255, 255, 255, 1);
     justify-content: center;
     align-items: center;
-
-    .login-form{
-        display: flex;
+    
+    .login-form,
+    .register-form{
+        display: none;
         flex-direction: column;
+        justify-content: center;
         width: 400px;
+        height: 550px;
         padding: 50px;
         border: 1px solid rgba(0, 100, 255, .1);
-        box-shadow: inset 0px 0px 20px 0px rgba(0, 100, 255, .5);
+        box-shadow: 0px 0px 10px 0px rgba(0, 100, 255, .5);
         border-radius: 5px;
-
         
+        &.active{
+            display: flex;
+        }
+
         .login-title{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
             margin: 5px 0;
             font-weight: bold; 
             font-size: 20px;
             text-align: center;
         }
 
+        .btn-register,
         .btn-login{
             height: 40px;
             margin: 10px 0px;
@@ -42,7 +53,12 @@
             }
         }
 
-        .email, .password{
+        .username, 
+        .birthday, 
+        .email, 
+        .gender, 
+        .password, 
+        .confirm-password{
             margin: 5px 0;
             padding: 8px 10px;
             border: 1px solid rgba(0, 0, 0, .1);
@@ -61,7 +77,7 @@
 
             &:focus,
             &:-webkit-autofill:focus{
-                border: 2px solid rgba(0, 100, 255, 0.5);
+                border: 1px solid rgba(0, 100, 255, 0.5);
             }
         }
 

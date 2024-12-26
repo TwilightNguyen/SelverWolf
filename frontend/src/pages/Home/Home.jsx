@@ -26,7 +26,7 @@ function Home() {
   //const [userId, setUserId] = useState(localStorage.getItem('logged_id'));
   const [chatList, setChatList] = useState([]);
   const [filterMessage, setFilterMessage] = useState(false);
-  const [chat, setChat] = useState(-1);
+  const [chat, setChat] = useState({id:-1,name:''});
   const [groupID,setGroupID] = useState([]);
   
   const handleChatList = async (uid) => {
@@ -46,8 +46,8 @@ function Home() {
       
       if(res.length > 0)
       {
-        temp = [...temp,res[0]];
-        group = [...group,value.id];
+        temp = [...temp, res[0]];
+        group = [...group, value.id];
         setChatList(temp);
         setGroupID(group);
       }
@@ -107,9 +107,9 @@ function Home() {
                     avatar={'Avatar'} 
                     username={value.username} 
                     message={'Message '+ value.id}
-                    className={[chat===groupID[index] ? 'active' : '']}
+                    className={[chat.id===groupID[index] ? 'active' : '']}
                     onClick={()=>{
-                      setChat(groupID[index]);
+                      setChat({id:groupID[index], name:value.username});
                     }}
                   />
                 );
@@ -118,7 +118,15 @@ function Home() {
           </div>
         </div>
       </div>
-        {chat > -1 && <Chat userId={+userId} username = {username} groupId = {chat.toString()}/>}
+        {
+          chat.id > -1 && 
+          <Chat 
+            userId={+userId} 
+            userName = {username} 
+            groupId = {chat.id.toString()} 
+            groupName={chat.name.toString()}
+          />
+        }
     </div>
   )
 }

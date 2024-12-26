@@ -4,6 +4,7 @@ import { and, eq,or } from 'drizzle-orm';
 // import { ctx } from '../../context';
 import { users } from '../../config/db/schema/user';
 import { error } from 'elysia';
+import { password } from 'bun';
 
 // const responseSchema = t.Object({
 //   message: t.String(),
@@ -23,6 +24,23 @@ export const login = async (db,body) => {
     // console.log(usersList);
     return usersList;
 };
+
+export const register = async (db,body) => { 
+  try{
+    const response = await db().insert(users).values({
+        username: `${body.userName}`,
+        email: `${body.email}`,
+        gender: `${body.gender}`,
+        birthday: new Date(body.birthDay),
+        password: `${body.password}`
+    });
+    return response;
+  }catch(error){
+      console.log(error);
+      return error;
+  }
+};
+
 
 export const getUser = async(db, id, email) => {
   try{

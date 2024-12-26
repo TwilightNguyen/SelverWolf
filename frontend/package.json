@@ -10,14 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "sass": "^1.72.0",
-    "scss": "^0.2.4",
-    "@tippyjs/react": "^4.2.6"
+    "scss": "^0.2.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

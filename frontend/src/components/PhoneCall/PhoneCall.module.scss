@@ -1,0 +1,75 @@
+.wrapper{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 5px;
+    background-color: #2c2c2c;
+    
+    .my-video{
+        width: 100%;
+        object-fit: contain;
+        border-radius: 2px;
+        transform: scaleX(-1);
+    }
+    
+    .remote-video{
+        position: absolute;
+        content: '';
+        width: 300px;
+        top: 5px;
+        right: 5px;
+        transform: scaleX(-1);
+    }
+
+    .control{
+        position: absolute;
+        content: '';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 70px;
+        width: 100%;
+        bottom: 0;
+        margin: 0;
+        background: rgba(0, 0, 0, .05);
+        border-radius: 5px;
+
+        .phone-btn,
+        .audio-btn,
+        .video-btn{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100% - 20px);
+            aspect-ratio: 1/1;
+            margin: 5px;
+            padding: 13px;
+            border-radius: 100px;
+            cursor: pointer;
+            background-color: #fff;
+            
+            &:hover{
+                background: rgba(255, 0, 0, 1);
+                box-shadow: 0px 0px 10px 0px rgba(255, 0, 0, 1);
+                .icon{
+                    color: #fff;
+                }
+            }
+            
+            .icon{
+                height: 100%;
+                width: 100%;
+            }
+        }
+        
+        .phone-btn{
+            height: calc(100% - 15px);
+            box-shadow: 0px 0px 5px 0px rgba(255, 0, 0, 1);
+            .icon{
+                color: rgba(255, 0, 0, 1);
+            }
+        }
+    }
+}

@@ -1,11 +1,32 @@
 
 :root{
-    --sidebar-width: 64px;
+    --root-background-color: rgb(242, 247, 255);
+    --part-background-color:  rgb(255, 255, 255);
+    --scroll-background-color: rgb(190, 190, 190);
+    --scroll-background-color-hover: rgb(131, 131, 131); 
+    --call-background-color: rgb(204, 224, 255);
+    --input-background-color: rgb(255, 255, 255);
+    --theme-transition:  ease-in-out 0.5s;
     --text-color-default: rgb(63, 63, 63);
+    --username-text-color: rgb(0, 100, 255);
+    --sidebar-width: 64px;
+    --message-receive-background-color: rgb(255, 255, 255); 
 }
 
 *{
     box-sizing: border-box;
+}
+
+.theme-dark{
+    --root-background-color: rgb(36, 36, 36);
+    --part-background-color:  rgb(51, 51, 51);
+    --scroll-background-color: rgb(65, 65, 65);
+    --scroll-background-color-hover: rgb(70, 70, 70); 
+    --call-background-color: rgb(41, 61, 92);
+    --input-background-color: rgb(80, 80, 80);
+    --username-text-color: rgb(255, 255, 255);
+    --text-color-default: rgb(255, 255, 255);
+    --message-receive-background-color: rgb(131, 131, 131);  
 }
 
 body{
@@ -14,4 +35,5 @@ body{
     font-size: 1.0rem;
     font-family: sans-serif;
     color: var(--text-color-default);
+    background-color: var(--root-background-color);
 }

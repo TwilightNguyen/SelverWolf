@@ -19,13 +19,12 @@ async function loadUserInfo(id) {
   return await getRequest(`/user/${id}/false`);
 }
 
-
 function Home() {
   const username = localStorage.getItem('logged_user'); 
   const userId = localStorage.getItem('logged_id');
   //const [userId, setUserId] = useState(localStorage.getItem('logged_id'));
   const [chatList, setChatList] = useState([]);
-  const [filterMessage, setFilterMessage] = useState(false);
+  const [filterMessage, setFilterMessage] = useState('all');
   const [chat, setChat] = useState({id:-1,name:''});
   const [groupID,setGroupID] = useState([]);
   
@@ -86,14 +85,14 @@ function Home() {
               <UserGroupIcon className={cx('add-group-icon')}/>
             </div>
           </div>
-          <div className={cx('filter')}>
-            <div className={cx('all', !filterMessage && 'active')}
-              onClick={() => setFilterMessage(false)}
+          <div className={cx('filter',filterMessage === 'all' ? 'filter-all' : filterMessage === 'unread' ? 'filter-unread' : '')}>
+            <div className={cx('all', filterMessage === 'all' && 'active')}
+              onClick={() => setFilterMessage('all')}
             >
               All
             </div>
-            <div className={cx('unread', filterMessage && 'active')}
-              onClick={() => setFilterMessage(true)}
+            <div className={cx('unread', filterMessage === 'unread' && 'active')}
+              onClick={() => setFilterMessage('unread')}
             >
               Unread
             </div>

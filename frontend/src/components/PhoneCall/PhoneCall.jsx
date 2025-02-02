@@ -145,6 +145,11 @@ function PhoneCall({ws, callAccepted, receivingCall, userId, groupId}){
         } 
     },[callEnded]);
 
+    const HandleEndCall = () => {
+        console.log('Handle end call');
+        ws.current.send(JSON.stringify({type: 'onEndCall'}));
+    }
+
     return (
         <div className = {cx('wrapper')}>
             <video ref={myVideoRef} className={cx('my-video')}></video>
@@ -165,11 +170,7 @@ function PhoneCall({ws, callAccepted, receivingCall, userId, groupId}){
                 <div 
                     className={cx('phone-btn')}
                     id="phone-btn"
-                    onClick={()=>{
-                        setAudioCall(false);
-                        setVideoCall(false);
-                        setCallEnded(true);
-                    }}
+                    onClick={() => HandleEndCall()}
                 >
                     {
                         <PhoneSlashIcon className={cx('icon')}/>

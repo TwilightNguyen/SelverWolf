@@ -67,6 +67,19 @@ const server = Bun.serve({
                     name: `${ws.data.username}`, 
                     isAutomated: false
                 }, ws.data.groupId);
+            }else if(message.type==='onEndCall'){
+                sendToEveryone({ 
+                    type: 'onEndCall', 
+                    from: `${ws.data.userId}`, 
+                    name: `${ws.data.username}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
+            }else if(message.type==='onReceivingCall'){
+                sendToEveryone({ 
+                    type: 'onReceivingCall',
+                    from: `${ws.data.userId}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
             }else if(message.type==='onAnswerCall'){
                 sendToEveryone({ 
                     type: 'onAnswerCall', 

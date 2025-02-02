@@ -2,8 +2,8 @@
 .wrapper{
     display: flex;
     flex-direction: row;
-    background: rgba(0, 100, 255, 0.05);
-
+    background: var(--root-background-color);
+    transition: var(--theme-transition);
     .chat-content{
         width: calc(100% - var(--sidebar-width));
         //flex-shrink: 2;

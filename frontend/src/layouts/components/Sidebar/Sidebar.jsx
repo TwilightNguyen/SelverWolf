@@ -5,19 +5,21 @@ import classNames from 'classnames/bind';
 //import { useToken } from '../../../store';
 import { Wrapper as PopperWrapper } from '../../../components/Popper';
 import styles from './Sidebar.module.scss';
+import Theme from '../../../components/Theme';
 import { 
     CommentIcon,
     GearIcon, 
     UserIcon, 
     ContactsIcon
- } from '../../../components/Icons';
+} from '../../../components/Icons';
+    
 const cx = classNames.bind(styles);
 
 function Sidebar() {  
     //const { token, setToken } = useToken();
     //console.log(valueContext);
     const page = location.pathname.substring 
-            (location.pathname.lastIndexOf("/") + 1); 
+        (location.pathname.lastIndexOf("/") + 1); 
 
     const handleSignOut = ()=>{
         localStorage.removeItem('logged_email');
@@ -51,6 +53,7 @@ function Sidebar() {
                     placement = 'right-end'
                     render={()=>(
                         <PopperWrapper>
+                            <Theme />
                             <div className={cx('setting-popup')}>
                                 <button 
                                     className={cx('sign-out')}

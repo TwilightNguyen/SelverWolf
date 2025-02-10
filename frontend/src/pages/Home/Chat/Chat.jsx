@@ -4,14 +4,13 @@ import PropTypes from 'prop-types';
 import classNames from "classnames/bind";
 
 import { 
+  MicrophoneIcon,
   PhoneIcon, 
+  PhoneSlashIcon, 
   SentIcon, 
   VideoIcon, 
  } from '../../../components/Icons';
-
 import Avatar from "../../../components/Avatar";
-
-import PhoneCall from "../../../components/PhoneCall";
 import ReceivingCall from "../../../components/ReceivingCall/ReceivingCall";
 
 import style from './Chat.module.scss';
@@ -24,6 +23,7 @@ function Chat({
   groupId,
   groupName
 }) {
+  const [stream, setStream] = useState();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]); 
   const [videoCall, setVideoCall] = useState(false);
@@ -64,12 +64,14 @@ function Chat({
         setCallAccepted(false);
         setCallEnded(false);
         setCaller(+res.from);
-      }else if(res.type === 'onCall'){
+      }else if(res.type === "onAccepted"){
         setCallAccepted(true);
+      }
+      else if(res.type === 'onCall'){
+        setCallAccepted(false);
         setReceivingCall(false);
         setCallEnded(false);
       }else if(res.type === 'onEndCall'){
-        console.log('end call');
         setCallAccepted(false);
         setReceivingCall(false);
         setCallEnded(true);
@@ -99,7 +101,7 @@ function Chat({
   },[messages]);
 
   useEffect(()=>{
-    inputRef.current !=null && inputRef.current.focus();
+    inputRef.current != null && inputRef.current.focus();
   });
   
   //Function handle sent message
@@ -120,19 +122,31 @@ function Chat({
   const HandleCall = () => {
     ws.current.send(JSON.stringify({type: 'onReceivingCall'}));
   }
+  
+  const HandleEndCall = () => {
+    ws.current.send(JSON.stringify({type: 'onEndCall'}));
+  }
 
-  if(receivingCall && caller == userId && !callEnded){
+  if((receivingCall && caller == userId || callAccepted) && !callEnded){
     return (
       <div className={cx('call-wrapper')}>
-        <div className={cx('video')}>
-          <PhoneCall 
-            ws={ws} 
-            callAccepted={callAccepted}
-            receivingCall={receivingCall}
-            groupId = {groupId}
-            userId = {userId}
-          />
-        </div>
+          <video className={cx('my-video')}></video>
+          {callAccepted && <video className={cx('remote-video')}></video>}
+          <div className={cx('control')}>
+            <div className={cx('video-btn')}>
+              <VideoIcon className={cx('icon')}/>
+            </div>
+
+            <div className={cx('phone-btn')}
+              onClick={HandleEndCall}
+            >
+              <PhoneSlashIcon className={cx('icon')}/>
+            </div>
+            
+            <div className={cx('audio-btn')}>
+              <MicrophoneIcon className={cx('icon')}/>
+            </div>
+          </div>
       </div>
     );
   }

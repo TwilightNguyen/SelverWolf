@@ -80,6 +80,12 @@ const server = Bun.serve({
                     from: `${ws.data.userId}`, 
                     isAutomated: false
                 }, ws.data.groupId);
+            }else if(message.type==='onAccepted'){
+                sendToEveryone({ 
+                    type: 'onAccepted',
+                    from: `${ws.data.userId}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
             }else if(message.type==='onAnswerCall'){
                 sendToEveryone({ 
                     type: 'onAnswerCall', 

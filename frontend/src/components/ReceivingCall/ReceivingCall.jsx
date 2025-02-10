@@ -41,8 +41,12 @@ function ReceivingCall({ws, groupName }){
     },[]);
 
     const HandleEndCall = () => {
-        console.log('send end call');
         ws.current.send(JSON.stringify({type: 'onEndCall'}));
+    }
+    
+    const HandleCallAccepted = () => {
+        console.log('send accepted call');
+        ws.current.send(JSON.stringify({type: 'onAccepted'}));
     }
 
     return <div className={cx('wrapper')}>
@@ -107,6 +111,7 @@ function ReceivingCall({ws, groupName }){
 
             <div
                 className={cx('accept')} 
+                onClick={() => HandleCallAccepted()}
             >
                 <PhoneIcon />
             </div>

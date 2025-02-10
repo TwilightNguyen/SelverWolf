@@ -252,6 +252,7 @@
 }
 
 .call-wrapper{
+    position: relative;
     display: flex;
     background-color: rgba(0, 0, 0, .1);
     border-radius: 5px;
@@ -260,18 +261,24 @@
     flex-shrink: 1;
     overflow: hidden;
 
-    .video{
+    .my-video{
         display: flex;
+        max-width: 100%;
+        max-height: 100%;
         margin: 20px;
-        background-color: #fff;
+        background-color: #2c2c2c;
         border-radius: 5px;
         overflow: hidden;
         flex-grow: 1;
+    }
 
-        video{
-            max-width: 100%;
-            max-height: 100%;
-        }
+    .remote-video{
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 250px;
+        background-color: #888888;
+        border-radius: 5px;
     }
 
     .control{
@@ -286,6 +293,7 @@
         margin: 0 20px 20px 20px;
         background: rgba(0, 0, 0, .05);
         border-radius: 5px;
+        
 
         .phone-btn,
         .audio-btn,
@@ -300,10 +308,12 @@
             border-radius: 100px;
             cursor: pointer;
             background-color: #fff;
+            color: rgb(63, 63, 63);;
             
             &:hover{
                 background: rgba(255, 0, 0, 1);
                 box-shadow: 0px 0px 10px 0px rgba(255, 0, 0, 1);
+                
                 .icon{
                     color: #fff;
                 }

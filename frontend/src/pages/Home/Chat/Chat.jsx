@@ -37,12 +37,13 @@ function Chat({
   const [callEnded, setCallEnded] = useState(false);
   const [name, setName] = useState('');
   
-
+  
   const ws = useRef(); 
   const inputRef = useRef();
   const contentRef = useRef();
-  const myVideo = useRef();
-  const userVideo = useRef();
+  const myVideoRef = useRef();
+
+  console.log('mute');
 
   useEffect(() => {
     setMessages([]);
@@ -72,9 +73,11 @@ function Chat({
         setReceivingCall(false);
         setCallEnded(false);
       }else if(res.type === 'onEndCall'){
-        setCallAccepted(false);
-        setReceivingCall(false);
-        setCallEnded(true);
+        // removeVideoStream();
+        // setCallAccepted(false);
+        // setReceivingCall(false);
+        // setCallEnded(true);
+        
       }
       
       setMessages(prev => [...prev ?? [], JSON.parse(ev.data)]);
@@ -103,6 +106,13 @@ function Chat({
   useEffect(()=>{
     inputRef.current != null && inputRef.current.focus();
   });
+
+  useEffect(()=>{
+    if(stream){
+      addVideoStream();
+      //stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
+    }
+  },[stream]);
   
   //Function handle sent message
   const handleOnSubmit = (e) =>{
@@ -123,14 +133,59 @@ function Chat({
     ws.current.send(JSON.stringify({type: 'onReceivingCall'}));
   }
   
-  const HandleEndCall = () => {
+  const HandleEndCall = async () => {
+    await removeVideoStream();
     ws.current.send(JSON.stringify({type: 'onEndCall'}));
   }
 
+  function addVideoStream(){
+    if(stream){
+      try{ 
+        console.log('add stream');
+        myVideoRef.current.srcObject = stream;
+        myVideoRef.current.addEventListener('loadedmetadata', () => {
+          myVideoRef.current.play();
+        });
+      }
+      catch(ex){
+        console.error(ex);
+      }
+    }
+  }
+
+  function removeVideoStream(){
+
+    console.log('remove');
+    stream && stream.getTracks().forEach(async function(track){
+      await track.stop();
+      console.log(track);
+    });
+
+    //myVideoRef.current.srcObject = null; 
+  }
+
   if((receivingCall && caller == userId || callAccepted) && !callEnded){
+    if(receivingCall && caller == userId){
+      //myVideoRef.current.muted = true;
+    
+      !stream && navigator.mediaDevices.enumerateDevices().then(devices => {
+          devices.forEach(device => {
+              if (device.kind === 'videoinput') {
+                  navigator.mediaDevices.getUserMedia({
+                      video: { deviceId: { exact: device.deviceId }},
+                      audio: true
+                  }).then(vStream => {
+                      setStream(vStream);
+                  }).catch(error => {
+                  });
+              }
+          });
+      });
+    }
+
     return (
       <div className={cx('call-wrapper')}>
-          <video className={cx('my-video')}></video>
+          <video ref={myVideoRef} className={cx('my-video')}></video>
           {callAccepted && <video className={cx('remote-video')}></video>}
           <div className={cx('control')}>
             <div className={cx('video-btn')}>

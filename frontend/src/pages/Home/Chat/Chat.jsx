@@ -37,7 +37,6 @@ function Chat({
   const [callEnded, setCallEnded] = useState(false);
   const [name, setName] = useState('');
   
-  
   const ws = useRef(); 
   const inputRef = useRef();
   const contentRef = useRef();
@@ -59,12 +58,12 @@ function Chat({
     
     ws.current.onmessage = (ev) => {
       var res = JSON.parse(ev.data);
-      console.log(res);
       if(res.type === 'onReceivingCall'){
         setReceivingCall(true);
         setCallAccepted(false);
         setCallEnded(false);
         setCaller(+res.from);
+        console.log('es');
       }else if(res.type === "onAccepted"){
         setCallAccepted(true);
       }
@@ -74,13 +73,13 @@ function Chat({
         setCallEnded(false);
       }else if(res.type === 'onEndCall'){
         // removeVideoStream();
-        // setCallAccepted(false);
-        // setReceivingCall(false);
-        // setCallEnded(true);
-        
+        setCallAccepted(false);
+        setReceivingCall(false);
+        setCallEnded(true);
+        setStream(null);
+      }else{
+        setMessages(prev => [...prev ?? [], JSON.parse(ev.data)]);
       }
-      
-      setMessages(prev => [...prev ?? [], JSON.parse(ev.data)]);
     }
 
     setMessage('');
@@ -89,10 +88,6 @@ function Chat({
       ws.current?.close();
     }
   }, [groupId]);
-
-  useEffect(() => {
-    if(!ws.current) return;
-  }, [ws.current]);
  
   useEffect(() => {
     if(
@@ -110,7 +105,14 @@ function Chat({
   useEffect(()=>{
     if(stream){
       addVideoStream();
-      //stream.getTracks().forEach(track => peerRef.current.addTrack(track, stream));
+    }
+
+    return () => {
+      stream && stream.getTracks().forEach(async function(track){
+        if (track.readyState == 'live') {
+          await track.stop();
+        }
+      });
     }
   },[stream]);
   
@@ -124,6 +126,7 @@ function Chat({
     if(message.replaceAll(' ','') === ''){
       return;
     }
+    
     //console.log(`Message sent: ${message}`);
     ws.current.send(JSON.stringify({type: 'onText', data: message}));
     setMessage('');
@@ -154,32 +157,27 @@ function Chat({
   }
 
   function removeVideoStream(){
-
     console.log('remove');
+    
     stream && stream.getTracks().forEach(async function(track){
-      await track.stop();
-      console.log(track);
+      if (track.readyState == 'live') {
+        await track.stop();
+      }
     });
 
-    //myVideoRef.current.srcObject = null; 
+    myVideoRef.current.srcObject = null;
+    console.log(stream.getTracks());
   }
 
   if((receivingCall && caller == userId || callAccepted) && !callEnded){
     if(receivingCall && caller == userId){
       //myVideoRef.current.muted = true;
-    
-      !stream && navigator.mediaDevices.enumerateDevices().then(devices => {
-          devices.forEach(device => {
-              if (device.kind === 'videoinput') {
-                  navigator.mediaDevices.getUserMedia({
-                      video: { deviceId: { exact: device.deviceId }},
-                      audio: true
-                  }).then(vStream => {
-                      setStream(vStream);
-                  }).catch(error => {
-                  });
-              }
-          });
+      !stream && navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true
+      }).then(vStream => {
+          setStream(vStream);
+      }).catch(error => {
       });
     }
 
@@ -222,15 +220,15 @@ function Chat({
           <div className={cx('right')}>
             <div
               className={cx('audio-call')}
-              onClick={()=> HandleCall()}
+              onClick={() => HandleCall()}
             >
               <PhoneIcon
                 className={cx('icon')}
-                />
+              />
             </div>
             <div
               className={cx('video-call')}
-              onClick={()=>HandleCall()}
+              onClick={() => HandleCall()}
             >
               <VideoIcon 
                 className={cx('icon')}
@@ -251,7 +249,7 @@ function Chat({
                       className={cx(data.isAutomated ? 'message-system' : +data.from === +userId ? 'message-sent' : 'message-receive')}
                     > 
                       {
-                        (!data.isAutomated && +data.from !== +userId && (i > 0 && messages[i-1].from != data.from))&&
+                        (!data.isAutomated && +data.from !== +userId && (i > 0 && messages[i-1].from != data.from)) &&
                         <Avatar className={cx('avatar')}/>
                       }
                       <p className={cx('message')} >{data.message}</p>

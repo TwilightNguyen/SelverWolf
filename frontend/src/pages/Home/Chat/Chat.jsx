@@ -41,8 +41,38 @@ function Chat({
   const inputRef = useRef();
   const contentRef = useRef();
   const myVideoRef = useRef();
+  const remoteVideoRef = useRef(); 
+  const prevTrackRef = useRef(); 
+  const peerRef = useRef(new RTCPeerConnection());
+  const peerRemoteRef = useRef(new RTCPeerConnection());
 
-  console.log('mute');
+  peerRef.current.ontrack = event => { 
+    const [remoteStream] = event.streams; 
+    console.log(remoteStream);
+    //remoteVideoRef.current.srcObject = remoteStream;
+    //addVideoStream();
+  }
+
+  // Handle ICE candidates 
+  peerRef.current.onicecandidate = event => { 
+    if (event.candidate) { 
+      ws.current.send(JSON.stringify({
+        type: 'onCall', signal: event.candidate
+      }));
+    }
+  }
+
+  async function sendVideoCall() {
+    const offer = await peerRef.current.createOffer();
+    // console.log(offer);
+    await peerRef.current.setLocalDescription(offer); 
+
+    console.log(peerRef);
+    ws.current.send(JSON.stringify({ 
+      type: 'onCall', 
+      signal: offer 
+    }));
+  }
 
   useEffect(() => {
     setMessages([]);
@@ -56,21 +86,62 @@ function Chat({
       console.log('socket closed.');
     }
     
-    ws.current.onmessage = (ev) => {
+    ws.current.onmessage = async (ev) => {
       var res = JSON.parse(ev.data);
       if(res.type === 'onReceivingCall'){
         setReceivingCall(true);
         setCallAccepted(false);
         setCallEnded(false);
         setCaller(+res.from);
-        console.log('es');
+        peerRef.current = new RTCPeerConnection();
       }else if(res.type === "onAccepted"){
         setCallAccepted(true);
       }
       else if(res.type === 'onCall'){
-        setCallAccepted(false);
-        setReceivingCall(false);
-        setCallEnded(false);
+        if(!res.signal){
+          setCallAccepted(false);
+          setReceivingCall(false);
+          setCallEnded(false);
+        }
+        console.log(res.signal);
+
+        if(res.signal.type == 'offer'){
+          if (peerRef.current.signalingState === 'stable' && 
+            +userId != +res.from
+          ) {
+              await peerRef.current.setRemoteDescription(
+                  new RTCSessionDescription(res.signal)
+              ); 
+              
+              const answer = await peerRef.current.createAnswer(); 
+              await peerRef.current.setLocalDescription(answer); 
+              
+              ws.current.send(JSON.stringify({
+                  type: 'onCall', 
+                  signal: answer
+              })); 
+          }else{
+              console.error('Received offer in wrong signaling state: ', peerRef.current.signalingState);
+          }
+        }
+
+        // if (res.signal.type == 'answer'
+        // ) { 
+        //     //console.log(res.signal);
+        //     if (peerRef.current.signalingState === 'have-local-offer' && +userId != +res.from) {
+        //         await peerRef.current.setRemoteDescription(
+        //             new RTCSessionDescription(res.signal)
+        //         ); 
+        //     }else{
+        //         console.error('Received answer in wrong signaling state: ', peerRef.current.signalingState);
+        //     }
+        // } 
+        
+        // if (res.signal.candidate && 
+        //     +userId != +res.from
+        // ) { 
+        //     await peerRef.current.addIceCandidate(new RTCIceCandidate(res.candidate)); 
+        // } 
       }else if(res.type === 'onEndCall'){
         // removeVideoStream();
         setCallAccepted(false);
@@ -88,7 +159,7 @@ function Chat({
       ws.current?.close();
     }
   }, [groupId]);
- 
+
   useEffect(() => {
     if(
       document.getElementById('content') &&
@@ -104,7 +175,12 @@ function Chat({
 
   useEffect(()=>{
     if(stream){
+      console.log(peerRef);
+      stream.getTracks().forEach(track => 
+        prevTrackRef.current = peerRef.current.addTrack(track, stream)
+      );
       addVideoStream();
+      sendVideoCall();
     }
 
     return () => {
@@ -136,15 +212,14 @@ function Chat({
     ws.current.send(JSON.stringify({type: 'onReceivingCall'}));
   }
   
-  const HandleEndCall = async () => {
-    await removeVideoStream();
+  const HandleEndCall = () => {
+    removeVideoStream();
     ws.current.send(JSON.stringify({type: 'onEndCall'}));
   }
 
   function addVideoStream(){
     if(stream){
       try{ 
-        console.log('add stream');
         myVideoRef.current.srcObject = stream;
         myVideoRef.current.addEventListener('loadedmetadata', () => {
           myVideoRef.current.play();
@@ -157,16 +232,16 @@ function Chat({
   }
 
   function removeVideoStream(){
-    console.log('remove');
-    
+    console.log(peerRef.current);
+    stream && peerRef.current.removeTrack(prevTrackRef.current);
     stream && stream.getTracks().forEach(async function(track){
       if (track.readyState == 'live') {
         await track.stop();
       }
     });
 
+    peerRef.current.close();
     myVideoRef.current.srcObject = null;
-    console.log(stream.getTracks());
   }
 
   if((receivingCall && caller == userId || callAccepted) && !callEnded){
@@ -175,8 +250,8 @@ function Chat({
       !stream && navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true
-      }).then(vStream => {
-          setStream(vStream);
+      }).then(vStream => { 
+        setStream(vStream);
       }).catch(error => {
       });
     }
@@ -184,7 +259,7 @@ function Chat({
     return (
       <div className={cx('call-wrapper')}>
           <video ref={myVideoRef} className={cx('my-video')}></video>
-          {callAccepted && <video className={cx('remote-video')}></video>}
+          {callAccepted && <video ref={remoteVideoRef} className={cx('remote-video')}></video>}
           <div className={cx('control')}>
             <div className={cx('video-btn')}>
               <VideoIcon className={cx('icon')}/>

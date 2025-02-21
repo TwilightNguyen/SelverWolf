@@ -24,6 +24,7 @@ function Chat({
   groupName
 }) {
   const [stream, setStream] = useState();
+  const [remoteStream, setRemoteStream] = useState();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]); 
   const [videoCall, setVideoCall] = useState(false);
@@ -48,16 +49,21 @@ function Chat({
 
   peerRef.current.ontrack = event => { 
     const [remoteStream] = event.streams; 
-    console.log(remoteStream);
+    setRemoteStream(remoteStream);
     //remoteVideoRef.current.srcObject = remoteStream;
-    //addVideoStream();
   }
 
   // Handle ICE candidates 
   peerRef.current.onicecandidate = event => { 
     if (event.candidate) { 
+      // ws.current.send(JSON.stringify({
+      //   type: 'onCall', signal: event.candidate
+      // }));
       ws.current.send(JSON.stringify({
-        type: 'onCall', signal: event.candidate
+        type: 'onCandidate',
+        candidate: event.candidate,
+        from: userId,
+        to: groupId
       }));
     }
   }
@@ -67,7 +73,6 @@ function Chat({
     // console.log(offer);
     await peerRef.current.setLocalDescription(offer); 
 
-    console.log(peerRef);
     ws.current.send(JSON.stringify({ 
       type: 'onCall', 
       signal: offer 
@@ -103,45 +108,65 @@ function Chat({
           setReceivingCall(false);
           setCallEnded(false);
         }
-        console.log(res.signal);
+        // console.log(res.signal);
 
         if(res.signal.type == 'offer'){
           if (peerRef.current.signalingState === 'stable' && 
             +userId != +res.from
           ) {
-              await peerRef.current.setRemoteDescription(
-                  new RTCSessionDescription(res.signal)
-              ); 
+              await peerRef.current.setRemoteDescription(new RTCSessionDescription(res.signal))
+                .catch(error => {
+                  console.error('Error setting remote description:', error);
+                });
               
               const answer = await peerRef.current.createAnswer(); 
+
               await peerRef.current.setLocalDescription(answer); 
               
               ws.current.send(JSON.stringify({
                   type: 'onCall', 
-                  signal: answer
+                  signal: answer,
+                  from: userId,
+                  name: userName,
+                  isAutomated: false
               })); 
           }else{
               console.error('Received offer in wrong signaling state: ', peerRef.current.signalingState);
           }
         }
 
-        // if (res.signal.type == 'answer'
-        // ) { 
-        //     //console.log(res.signal);
-        //     if (peerRef.current.signalingState === 'have-local-offer' && +userId != +res.from) {
-        //         await peerRef.current.setRemoteDescription(
-        //             new RTCSessionDescription(res.signal)
-        //         ); 
-        //     }else{
-        //         console.error('Received answer in wrong signaling state: ', peerRef.current.signalingState);
-        //     }
-        // } 
-        
-        // if (res.signal.candidate && 
-        //     +userId != +res.from
-        // ) { 
-        //     await peerRef.current.addIceCandidate(new RTCIceCandidate(res.candidate)); 
-        // } 
+        if (res.signal.type == 'answer'
+        ) { 
+            //console.log(res.signal);
+            if (peerRef.current.signalingState === 'have-local-offer' && +userId != +res.from) {
+                await peerRef.current.setRemoteDescription(
+                    new RTCSessionDescription(res.signal)
+                ); 
+            }else{
+                console.error('Received answer in wrong signaling state: ', peerRef.current.signalingState);
+            }
+        } 
+      }else if(res.type === 'onCandidate'){
+        if (res.signal.candidate && 
+          +userId != +res.from
+        ) {
+            console.log("Received Signal Data", res); // Log the entire message
+            if (res.candidate) {
+                console.log("Received Candidate Data", res.candidate);
+                const candidate = res.candidate;
+                if (candidate.sdpMid && candidate.sdpMLineIndex !== null) {
+                    console.log("Valid Candidate Found", candidate)
+                    peerRef.current.addIceCandidate(new RTCIceCandidate(candidate))
+                    .catch(error => {
+                        console.error('Error adding received ICE candidate', error);
+                    });
+                } else {
+                    console.error('Received ICE candidate with missing sdpMid or sdpMLineIndex:', candidate);
+                }
+            } else {
+                console.error("No candidate found in the signal:", res)
+            }
+        }
       }else if(res.type === 'onEndCall'){
         // removeVideoStream();
         setCallAccepted(false);
@@ -191,6 +216,18 @@ function Chat({
       });
     }
   },[stream]);
+
+  useEffect(()=>{
+    console.log(callAccepted);
+    if(caller != userId  && callAccepted){
+      console.log('remote stream');
+      console.log(remoteStream);
+      remoteVideoRef.current.srcObject = remoteStream;
+      remoteVideoRef.current.addEventListener('loadedmetadata', () => {
+        remoteVideoRef.current.play();
+      });
+    }
+  },[callAccepted]);
   
   //Function handle sent message
   const handleOnSubmit = (e) =>{
@@ -232,7 +269,6 @@ function Chat({
   }
 
   function removeVideoStream(){
-    console.log(peerRef.current);
     stream && peerRef.current.removeTrack(prevTrackRef.current);
     stream && stream.getTracks().forEach(async function(track){
       if (track.readyState == 'live') {

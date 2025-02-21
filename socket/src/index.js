@@ -67,6 +67,14 @@ const server = Bun.serve({
                     name: `${ws.data.username}`, 
                     isAutomated: false
                 }, ws.data.groupId);
+            }else if(message.type==='onCandidate'){
+                sendToEveryone({ 
+                    type: 'onCandidate',
+                    signal: message.signal, 
+                    from: `${ws.data.userId}`, 
+                    name: `${ws.data.username}`, 
+                    isAutomated: false
+                }, ws.data.groupId);
             }else if(message.type==='onEndCall'){
                 sendToEveryone({ 
                     type: 'onEndCall', 
